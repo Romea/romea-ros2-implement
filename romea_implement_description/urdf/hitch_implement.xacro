@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="hitch_implement">
+   <xacro:macro name="hitch_implement"
+      params="prefix mode name model xyz rpy parent_link controller_manager_config_yaml_file ros2_control_config_urdf_file ros_prefix ros_distro">
+
+      <xacro:property
+         name="hitch_prefix"
+         value="${prefix}${name}" />
+      <xacro:property
+         name="parent_link_name"
+         value="${prefix}${parent_link}" />
+      <xacro:property
+         name="hitch_type"
+         value="hitch${model}" />
+
+      <!-- <xacro:property
+         name="visual_params_file"
+         value="$(find hitch_description)/config/${hitch_type}/visual_parameters.yaml" /> -->
+
+      <!-- implement -->
+      <xacro:include filename="$(find romea_implement_description)/urdf/common.xacro" />
+      <!-- params="mass x y z " -->
+      <link name="${hitch_prefix}_link">
+         <xacro:inertial_dummy />
+      </link>
+      <joint name="${hitch_prefix}_joint" type="fixed">
+         <origin xyz="${xyz}" rpy="${rpy}" />
+         <child link="${hitch_prefix}_link" />
+         <parent link="${parent_link_name}" />
+      </joint>
+      <link name="${hitch_prefix}_hitch_link">
+         <visual>
+            <geometry>
+               <box size="1.0 2.0 0.5" />
+            </geometry>
+            <origin xyz="0 0 -1." rpy="0 -${pi/2} 0 " />
+         </visual>
+         <collision>
+            <geometry>
+               <box size="1.0 2.0 0.5" />
+            </geometry>
+            <origin xyz="0 0 -1." rpy="0 -${pi/2} 0 " />
+         </collision>
+         <xacro:inertial_dummy />
+      </link>
+      <joint name="${hitch_prefix}_hitch_joint" type="prismatic">
+         <parent link="${hitch_prefix}_link" />
+         <child link="${hitch_prefix}_hitch_link" />
+         <limit effort="1000.0" lower="0" upper="0.5" velocity="0.5" />
+         <origin rpy="0 ${pi/2} 0" xyz="0 0 0" />
+      </joint>
+
+      <ros2_control name="${hitch_prefix}" type="system">
+         <xacro:if value="${'simulation' in mode}">
+            <hardware>
+               <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+            </hardware>
+         </xacro:if>
+         <joint name="${hitch_prefix}_hitch_joint">
+            <command_interface name="position" />
+            <command_interface name="velocity" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+         </joint>
+      </ros2_control>
+
+      <xacro:if value="${'simulation' in mode}">
+         <gazebo>
+            <plugin filename="libromea_gazebo_ros2_control.so" name="gazebo_ros2_control">
+               <ros2_control_config_file>${ros2_control_config_urdf_file}</ros2_control_config_file>
+               <controller_manager_config_file>${controller_manager_config_yaml_file}</controller_manager_config_file>
+               <ros>
+                  <namespace>${ros_prefix}${name}</namespace>
+               </ros>
+            </plugin>
+         </gazebo>
+
+      </xacro:if>
+   </xacro:macro>
+</robot>

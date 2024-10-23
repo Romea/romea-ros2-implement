@@ -1,0 +1,4 @@
+forward_position_controller:
+  ros__parameters:
+    joints:
+      - hitch_joint
