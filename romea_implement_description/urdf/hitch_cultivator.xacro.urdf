@@ -27,7 +27,7 @@
     ros_prefix="$(arg ros_prefix)"
     ros_distro="$(arg ros_distro)">
     <geometry>
-      <box size="1.0 2.0 0.5" />
+      <mesh filename="package://romea_implement_description/meshes/cultivator.obj" />
     </geometry>
   </xacro:hitch_implement>
 
