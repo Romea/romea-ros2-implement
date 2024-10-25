@@ -2,5 +2,5 @@ controller_manager:
   ros__parameters:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
-    forward_position_controller:
+    position_controller:
       type: position_controllers/JointGroupPositionController
