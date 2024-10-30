@@ -29,6 +29,9 @@
     <geometry>
       <box size="1.0 2.0 0.5" />
     </geometry>
+    <geometry>
+      <box size="1.0 2.0 0.5" />
+    </geometry>
   </xacro:hitch_implement>
 
 </robot>

@@ -29,6 +29,9 @@
     <geometry>
       <mesh filename="package://romea_implement_description/meshes/cultivator.obj" />
     </geometry>
+    <geometry>
+      <mesh filename="package://romea_implement_description/meshes/cultivator_collision.obj" />
+    </geometry>
   </xacro:hitch_implement>
 
 </robot>
