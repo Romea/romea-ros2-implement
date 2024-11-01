@@ -15,6 +15,40 @@
 
   <xacro:include filename="$(find romea_implement_description)/urdf/hitch_implement.xacro" />
 
+  <!-- macro to generate multiple collisions with different 'y' offsets -->
+  <xacro:macro name="repeat_collisions" params="offsets:=^">
+    <xacro:if value="${offsets}">
+      <xacro:property name="offset" value="${offsets.pop(0)}"/>
+
+      <collision>
+        <geometry>
+          <box size="0.0585 0.034 0.321" />
+        </geometry>
+        <origin xyz="0.185 ${-1.157 + offset} -0.405" rpy="0 -${pi/2} 0 " />
+      </collision>
+      <collision>
+        <geometry>
+          <box size="0.0585 0.034 0.321" />
+        </geometry>
+        <origin xyz="0.185 ${-1.411 + offset} -0.814" rpy="0 -${pi/2} 0 " />
+      </collision>
+      <collision>
+        <geometry>
+          <box size="0.031 0.071 0.233" />
+        </geometry>
+        <origin xyz="0.357 ${-1.412 + offset} -0.735" rpy="0 -2.14237 0 " />
+      </collision>
+      <collision>
+        <geometry>
+          <box size="0.031 0.071 0.233" />
+        </geometry>
+        <origin xyz="0.357 ${-1.156 + offset} -0.325" rpy="0 -2.14237 0 " />
+      </collision>
+
+      <xacro:repeat_collisions/> <!-- recursive call to create a loop -->
+    </xacro:if>
+  </xacro:macro>
+
   <xacro:hitch_implement
     prefix="$(arg prefix)"
     name="$(arg name)"
@@ -26,18 +60,32 @@
     ros2_control_config_urdf_file="$(arg ros2_control_config_urdf_file)"
     ros_prefix="$(arg ros_prefix)"
     ros_distro="$(arg ros_distro)">
-    <visual>
-      <geometry>
-        <mesh filename="package://romea_implement_description/meshes/cultivator.obj" />
-      </geometry>
-      <origin xyz="0 0 0" rpy="0 -${pi/2} 0 " />
-    </visual>
-    <collision>
-      <geometry>
-        <mesh filename="package://romea_implement_description/meshes/cultivator_collision.obj" />
-      </geometry>
-      <origin xyz="0 0 0" rpy="0 -${pi/2} 0 " />
-    </collision>
+    <visuals>
+      <visual>
+        <geometry>
+          <mesh filename="package://romea_implement_description/meshes/cultivator.obj" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 -${pi/2} 0 " />
+      </visual>
+    </visuals>
+    <collisions>
+      <!-- <collision>
+        <geometry>
+          <mesh filename="package://romea_implement_description/meshes/cultivator_collision.obj" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 -${pi/2} 0 " />
+      </collision> -->
+
+      <!-- It is more efficient to use box primitive instead of a mesh of cubes -->
+      <!-- In this case: 76% of realtime using the mesh, 86% of realtime using boxes -->
+      <collision>
+        <geometry>
+          <box size="0.728 3.0 0.143" />
+        </geometry>
+        <origin xyz="-0.051 0 -0.415" rpy="0 -${pi/2} 0 " />
+      </collision>
+      <xacro:repeat_collisions offsets="${[0.428 * i for i in range(7)]}"/>
+    </collisions>
   </xacro:hitch_implement>
 
 </robot>

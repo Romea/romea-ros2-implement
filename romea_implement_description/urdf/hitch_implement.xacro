@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro" name="hitch_implement">
    <xacro:macro name="hitch_implement"
-      params="prefix mode name xyz rpy parent_link controller_manager_config_yaml_file ros2_control_config_urdf_file ros_prefix ros_distro *visual *collision">
+      params="prefix mode name xyz rpy parent_link controller_manager_config_yaml_file ros2_control_config_urdf_file ros_prefix ros_distro **visuals **collisions">
 
       <xacro:property
          name="hitch_prefix"
@@ -23,8 +23,8 @@
       </joint>
 
       <link name="${hitch_prefix}_hitch_link">
-         <xacro:insert_block name="visual"/>
-         <xacro:insert_block name="collision"/>
+         <xacro:insert_block name="visuals"/>
+         <xacro:insert_block name="collisions"/>
          <xacro:inertial_cuboid mass="100." x="1." y="2." z="0.5" />
       </link>
       <joint name="${hitch_prefix}_hitch_joint" type="prismatic">

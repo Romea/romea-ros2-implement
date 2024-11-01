@@ -26,18 +26,22 @@
     ros2_control_config_urdf_file="$(arg ros2_control_config_urdf_file)"
     ros_prefix="$(arg ros_prefix)"
     ros_distro="$(arg ros_distro)">
-    <visual>
-      <geometry>
-        <box size="1.0 2.0 0.5" />
-      </geometry>
-      <origin xyz="0 0 0" rpy="0 -${pi/2} 0 " />
-    </visual>
-    <collision>
-      <geometry>
-        <box size="1.0 2.0 0.5" />
-      </geometry>
-      <origin xyz="0 0 0" rpy="0 -${pi/2} 0 " />
-    </collision>
+    <visuals>
+      <visual>
+        <geometry>
+          <box size="1.0 2.0 0.5" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 -${pi/2} 0 " />
+      </visual>
+    </visuals>
+    <collisions>
+      <collision>
+        <geometry>
+          <box size="1.0 2.0 0.5" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 -${pi/2} 0 " />
+      </collision>
+    </collisions>
   </xacro:hitch_implement>
 
 </robot>
