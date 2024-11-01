@@ -26,12 +26,18 @@
     ros2_control_config_urdf_file="$(arg ros2_control_config_urdf_file)"
     ros_prefix="$(arg ros_prefix)"
     ros_distro="$(arg ros_distro)">
-    <geometry>
-      <mesh filename="package://romea_implement_description/meshes/cultivator.obj" />
-    </geometry>
-    <geometry>
-      <mesh filename="package://romea_implement_description/meshes/cultivator_collision.obj" />
-    </geometry>
+    <visual>
+      <geometry>
+        <mesh filename="package://romea_implement_description/meshes/cultivator.obj" />
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 -${pi/2} 0 " />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://romea_implement_description/meshes/cultivator_collision.obj" />
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 -${pi/2} 0 " />
+    </collision>
   </xacro:hitch_implement>
 
 </robot>
