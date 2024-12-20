@@ -7,4 +7,4 @@ uint8 GOING_TO_ANCHOR_HIGH = 5
 uint8 AT_ANCHOR_LOW = 6
 uint8 AT_ANCHOR_HIGH = 7
 
-uint8 status
+uint8 state
