@@ -1,0 +1,10 @@
+uint8 NONE=0
+uint8 STOPPED=1
+uint8 GOING_DOWN=2
+uint8 GOING_UP=3
+uint8 GOING_TO_ANCHOR_LOW = 4
+uint8 GOING_TO_ANCHOR_HIGH = 5
+uint8 AT_ANCHOR_LOW = 6
+uint8 AT_ANCHOR_HIGH = 7
+
+uint8 status
