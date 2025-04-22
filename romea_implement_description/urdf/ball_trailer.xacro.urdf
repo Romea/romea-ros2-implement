@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="trailer">
+
+    <!-- <xacro:macro name="trailer"
+        params="prefix name xyz rpy parent_link"> -->
+
+    <xacro:arg name="prefix" default="" />
+    <xacro:arg name="mode" default="simulation" />
+    <xacro:arg name="name" default="implement" />
+    <xacro:arg name="parent_link" default="base_link" />
+    <xacro:arg name="xyz" default="0.0 0.0 0.0" />
+    <xacro:arg name="rpy" default="0.0 0.0 0.0" />
+    <xacro:arg name="controller_manager_config_yaml_file" default="" />
+    <xacro:arg name="ros2_control_config_urdf_file" default="" />
+    <xacro:arg name="ros_prefix" default="" />
+    <xacro:arg name="ros_distro" default="" />
+
+
+    <xacro:include filename="$(find romea_mobile_base_description)/urdf/wheel.xacro" />
+    <xacro:include filename="$(find adap2e_description)/urdf/visual/wheels.xacro" />
+
+    <xacro:property
+        name="M_PI"
+        value="3.1415" />
+
+    <xacro:property name="prefix" value="$(arg prefix)" />
+    <xacro:property name="mode" value="$(arg mode)" />
+    <xacro:property
+        name="trailer_prefix"
+        value="$(arg prefix)$(arg name)_" />
+    <xacro:property
+        name="maximal_wheel_speed"
+        value="4.0" />
+
+    <link name="${trailer_prefix}hitch_link">
+        <inertial>
+            <mass value="0.01" />
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+        </inertial>
+    </link>
+
+    <joint name="${trailer_prefix}to_hitch" type="fixed">
+        <parent link="$(arg prefix)$(arg parent_link)" />
+        <child link="${trailer_prefix}hitch_link" />
+        <origin xyz="$(arg xyz)" rpy="$(arg rpy)" />
+    </joint>
+
+    <xacro:macro name="ball_joint"
+        params="name xyz rpy parent_link child_link">
+
+        <link name="${name}yaw_link">
+            <inertial>
+                <mass value="0.01" />
+                <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+            </inertial>
+        </link>
+
+        <joint name="${name}yaw" type="revolute">
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <parent link="${parent_link}" />
+            <child link="${name}yaw_link" />
+            <axis xyz="0 0 1" />
+            <limit upper="1.2"
+                lower="-1.2"
+                effort="1000000"
+                velocity="10"
+            />
+        </joint>
+
+        <link name="${name}pitch_link">
+            <inertial>
+                <mass value="0.01" />
+                <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+            </inertial>
+        </link>
+
+        <joint name="${name}pitch" type="revolute">
+            <origin xyz="0.01 0 0" rpy="0 0 0" />
+            <parent link="${name}yaw_link" />
+            <child link="${name}pitch_link" />
+            <axis xyz="0 1 0" />
+            <limit upper="1"
+                lower="-1"
+                effort="1000000"
+                velocity="10"
+            />
+        </joint>
+
+        <joint name="${name}roll" type="revolute">
+            <origin xyz="${xyz}" rpy="${rpy}" />
+            <parent link="${name}pitch_link" />
+            <child link="${child_link}" />
+            <axis xyz="1 0 0" />
+            <limit upper="0.5"
+                lower="-0.5"
+                effort="1000000"
+                velocity="10"
+            />
+            <dynamics
+                damping="0"
+                friction="100000"
+            />
+        </joint>
+    </xacro:macro>
+
+    <xacro:ball_joint
+        name="${trailer_prefix}"
+        xyz="-2 0 0"
+        rpy="0 0 0"
+        parent_link="${trailer_prefix}hitch_link"
+        child_link="${trailer_prefix}chassis_link"
+    />
+
+
+    <link name="${trailer_prefix}chassis_link">
+        <inertial>
+            <origin xyz="1 0 0" rpy="0 1.5708 0" />
+            <mass value="200" />
+            <inertia ixx="266.67" ixy="0" ixz="0" iyy="266.67" iyz="0" izz="0.25" />
+        </inertial>
+        <collision name='chassis_collision'>
+            <origin xyz="1 0 0" rpy="0 1.5708 0" />
+            <geometry>
+                <cylinder radius="0.05" length="2" />
+            </geometry>
+        </collision>
+        <visual name='chassis_visual'>
+            <origin xyz="1 0 0" rpy="0 1.5708 0" />
+            <geometry>
+                <cylinder radius="0.05" length="2" />
+            </geometry>
+            <material name="Black">
+                <color rgba="0.0 0.0 0.0 1.0" />
+            </material>
+        </visual>
+    </link>
+
+    <joint name="${trailer_prefix}unload_joint" type="revolute">
+        <origin xyz="-0.2 0 0.2" rpy="0 0 3.1415" />
+        <parent link="${trailer_prefix}chassis_link" />
+        <child link="${trailer_prefix}bed_link" />
+        <axis xyz="0 1 0" />
+        <dynamics damping="4000.0" friction="80." />
+        <limit effort="10000.0" lower="0" upper="1.0" velocity="0.1" />
+    </joint>
+
+    <link name="${trailer_prefix}bed_link">
+        <inertial>
+            <origin xyz="-0.9 0 0" rpy="0 0 0" />
+            <mass value="200" />
+            <inertia ixx="26.04" ixy="0" ixz="0" iyy="56.04" iyz="0" izz="78.0" />
+        </inertial>
+        <collision name='bed_collision'>
+            <origin xyz="-0.9 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="1.8 1.2 0.35" />
+            </geometry>
+        </collision>
+        <visual name='bed_visual'>
+            <origin xyz="-0.9 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="1.8 1.2 0.35" />
+            </geometry>
+            <material name="Black">
+                <color rgba="0.0 0.0 0.0 1.0" />
+            </material>
+        </visual>
+    </link>
+
+    <ros2_control name="${trailer_prefix}" type="system">
+        <xacro:if value="${'simulation' in mode}">
+            <hardware>
+                <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+            </hardware>
+        </xacro:if>
+        <joint name="${trailer_prefix}unload_joint">
+            <param name="pos_kp">100000</param>
+            <param name="pos_ki">10.</param>
+            <param name="pos_kd">0</param>
+            <param name="pos_max_integral_error">10000</param>
+
+            <command_interface name="effort" />
+            <!-- <command_interface name="position" /> -->
+            <command_interface name="position_pid" />
+            <state_interface name="position" />
+            <state_interface name="velocity" />
+            <state_interface name="effort" />
+        </joint>
+    </ros2_control>
+
+    <xacro:if value="${'simulation' in mode}">
+        <gazebo>
+            <plugin filename="libromea_gazebo_ros2_control.so" name="gazebo_ros2_control">
+                <ros2_control_config_file>$(arg ros2_control_config_urdf_file)</ros2_control_config_file>
+                <controller_manager_config_file>$(arg controller_manager_config_yaml_file)</controller_manager_config_file>
+                <ros>
+                    <namespace>$(arg ros_prefix)$(arg name)</namespace>
+                </ros>
+            </plugin>
+        </gazebo>
+    </xacro:if>
+
+    <xacro:wheel
+        parent_link="$(arg name)_chassis_link"
+        wheel_spinning_link="left_spin_link"
+        wheel_spinning_joint="left_spin_joint"
+        wheel_mass="5"
+        wheel_width="0.13"
+        wheel_radius="0.325"
+        left_right="-1">
+        <origin
+            xyz="0 0.6 -0.4"
+            rpy="0 1.5708 1.5708" />
+        <xacro:rear_left_wheel_visual />
+    </xacro:wheel>
+
+    <xacro:wheel
+        parent_link="$(arg name)_chassis_link"
+        wheel_spinning_link="right_spin_link"
+        wheel_spinning_joint="right_spin_joint"
+        wheel_mass="5"
+        wheel_width="0.13"
+        wheel_radius="0.325"
+        left_right="1">
+        <origin
+            xyz="0 -0.6 -0.4"
+            rpy="0 -1.5708 -1.5708" />
+        <xacro:rear_right_wheel_visual />
+    </xacro:wheel>
+
+
+    <!-- </xacro:macro> -->
+</robot>

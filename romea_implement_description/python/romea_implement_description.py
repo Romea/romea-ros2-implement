@@ -19,10 +19,11 @@ from xml.dom import minidom
 from ament_index_python.packages import get_package_share_directory
 
 
-def hitch_implement_urdf(
+def type_implement_urdf(
     prefix,
     mode,
     name,
+    type,
     model,
     parent_link,
     xyz,
@@ -34,7 +35,8 @@ def hitch_implement_urdf(
     xacro_file = (
         get_package_share_directory("romea_implement_description")
         + "/urdf/"
-        + "hitch_"
+        + type
+        + "_"
         + model
         + ".xacro.urdf"
     )

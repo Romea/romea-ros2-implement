@@ -163,10 +163,11 @@ def urdf_description(robot_namespace, mode, meta_description_file_path):
         robot_namespace, meta_description, "controller_manager"
     )
 
-    return romea_implement_description.hitch_implement_urdf(
+    return romea_implement_description.type_implement_urdf(
         robot_urdf_prefix(robot_namespace),
         mode,
         meta_description.get_name(),
+        meta_description.get_type(),
         meta_description.get_model(),
         meta_description.get_parent_link(),
         meta_description.get_xyz(),

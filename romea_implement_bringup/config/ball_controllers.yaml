@@ -1,0 +1,4 @@
+position_controller:
+  ros__parameters:
+    joints:
+      - unload_joint
