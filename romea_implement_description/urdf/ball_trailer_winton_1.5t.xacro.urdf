@@ -121,7 +121,7 @@
         <visual name='chassis_visual'>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <mesh filename="package://romea_implement_description/meshes/winton_1.5t/chassis.dae" />
+                <mesh filename="package://romea_implement_description/meshes/winton_1.5t/chassis.obj" />
             </geometry>
         </visual>
     </link>
@@ -150,7 +150,7 @@
         <visual name='bed_visual'>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <mesh filename="package://romea_implement_description/meshes/winton_1.5t/dump_bed.dae" />
+                <mesh filename="package://romea_implement_description/meshes/winton_1.5t/dump_bed.obj" />
             </geometry>
         </visual>
     </link>
@@ -192,24 +192,34 @@
         parent_link="$(arg name)_chassis_link"
         wheel_spinning_link="left_spin_link"
         wheel_spinning_joint="left_spin_joint"
-        wheel_mass="5"
-        wheel_width="0.13"
-        wheel_radius="0.325"
+        wheel_mass="8"
+        wheel_width="0.16"
+        wheel_radius="0.3"
         left_right="-1">
         <origin xyz="-2.3986 -0.54 -0.0972" rpy="1.5708 0 0" />
-        <xacro:rear_left_wheel_visual />
+        <visual>
+            <origin xyz="0 0 0" rpy="1.5708 0 0" />
+            <geometry>
+                <mesh filename="package://romea_implement_description/meshes/winton_1.5t/wheel.obj" />
+            </geometry>
+        </visual>
     </xacro:wheel>
 
     <xacro:wheel
         parent_link="$(arg name)_chassis_link"
         wheel_spinning_link="right_spin_link"
         wheel_spinning_joint="right_spin_joint"
-        wheel_mass="5"
-        wheel_width="0.13"
-        wheel_radius="0.325"
+        wheel_mass="8"
+        wheel_width="0.16"
+        wheel_radius="0.3"
         left_right="1">
-        <origin xyz="-2.3986 0.54 -0.0972" rpy="1.5708 0 0" />
-        <xacro:rear_right_wheel_visual />
+        <origin xyz="-2.3986 0.54 -0.0972" rpy="-1.5708 0 0" />
+        <visual>
+            <origin xyz="0 0 0" rpy="1.5708 0 0" />
+            <geometry>
+                <mesh filename="package://romea_implement_description/meshes/winton_1.5t/wheel.obj" />
+            </geometry>
+        </visual>
     </xacro:wheel>
 
 

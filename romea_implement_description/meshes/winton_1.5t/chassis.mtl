@@ -1,0 +1,14 @@
+# Blender 4.4.1 MTL File: 'tipping_trailer.blend'
+# www.blender.org
+
+newmtl green_metal_rust
+Ns 150
+Ka 1.000000 1.000000 1.000000
+Ks 0.5 0.5 0.5
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd green_metal_rust_diff_1k_inrae.jpg
+map_Ns green_metal_rust_rough_1k.jpg
+map_Bump -bm 1.000000 green_metal_rust_nor_gl_1k.exr
