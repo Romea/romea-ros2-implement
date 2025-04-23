@@ -54,8 +54,8 @@
             <parent link="${parent_link}" />
             <child link="${name}yaw_link" />
             <axis xyz="0 0 1" />
-            <limit upper="1.2"
-                lower="-1.2"
+            <limit upper="1.5708"
+                lower="-1.5708"
                 effort="1000000"
                 velocity="10"
             />
