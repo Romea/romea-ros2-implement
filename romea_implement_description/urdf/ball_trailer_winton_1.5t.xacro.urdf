@@ -174,6 +174,15 @@
             <state_interface name="velocity" />
             <state_interface name="effort" />
         </joint>
+        <joint name="${trailer_prefix}yaw">
+            <state_interface name="position" />
+        </joint>
+        <joint name="${trailer_prefix}pitch">
+            <state_interface name="position" />
+        </joint>
+        <joint name="${trailer_prefix}roll">
+            <state_interface name="position" />
+        </joint>
     </ros2_control>
 
     <xacro:if value="${'simulation' in mode}">
