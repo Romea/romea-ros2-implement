@@ -9,8 +9,8 @@ class SimpleCommand(Node):
     def __init__(self):
         super().__init__("simple_command")
 
-        self.declare_parameter("anchor_high", 1.0)
-        self.declare_parameter("anchor_low", 0.0)
+        self.declare_parameter("anchor_high", 0.7)
+        self.declare_parameter("anchor_low", 0.25)
 
         self.anchor_high = self.get_parameter("anchor_high").value
         self.anchor_low = self.get_parameter("anchor_low").value
