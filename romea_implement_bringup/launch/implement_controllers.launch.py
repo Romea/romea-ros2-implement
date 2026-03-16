@@ -25,7 +25,11 @@ from launch_ros.actions import Node, PushRosNamespace
 
 
 from romea_common_bringup import device_namespace
-from romea_implement_bringup import ImplementMetaDescription, implement_prefix, create_configuration_file
+from romea_implement_bringup import (
+    ImplementMetaDescription,
+    implement_prefix,
+    create_configuration_file,
+)
 
 
 def get_mode(context):
@@ -45,10 +49,12 @@ def get_meta_description(context):
 
 
 def launch_setup(context, *args, **kwargs):
-
+    mode = get_mode(context)
     robot_namespace = get_robot_namespace(context)
     meta_description = get_meta_description(context)
-    controller_manager_name = implement_prefix(robot_namespace, meta_description)+"controller_manager"
+    controller_manager_name = (
+        implement_prefix(robot_namespace, meta_description) + "controller_manager"
+    )
     implement_name = meta_description.get_name()
 
     controllers_configuration_file_path = create_configuration_file(
@@ -75,7 +81,6 @@ def launch_setup(context, *args, **kwargs):
     )
 
     for controller_name in meta_description.get_controllers()["selected"]:
-
         actions.append(
             Node(
                 package="romea_mobile_base_controllers",
@@ -88,24 +93,30 @@ def launch_setup(context, *args, **kwargs):
                     "--controller-manager",
                     controller_manager_name,
                     "--namespace",
-                    device_namespace(robot_namespace, None, implement_name)
+                    device_namespace(robot_namespace, None, implement_name),
                 ],
             )
         )
+
+        if mode.startswith("simu"):
+            actions.append(
+                Node(
+                    package="romea_implement_bringup",
+                    executable="simple_command",
+                    exec_name="simple_command",
+                    namespace=device_namespace(robot_namespace, None, implement_name),
+                    remappings=[("command", f"/{robot_namespace}/base/implement/rear/command")],
+                )
+            )
 
     return [GroupAction(actions)]
 
 
 def generate_launch_description():
+    declared_arguments = [
+        DeclareLaunchArgument("mode"),
+        DeclareLaunchArgument("robot_namespace"),
+        DeclareLaunchArgument("meta_description_file_path"),
+    ]
 
-    declared_arguments = []
-
-    declared_arguments.append(DeclareLaunchArgument("mode"))
-
-    declared_arguments.append(DeclareLaunchArgument("robot_namespace"))
-
-    declared_arguments.append(DeclareLaunchArgument("meta_description_file_path"))
-
-    return LaunchDescription(
-        declared_arguments + [OpaqueFunction(function=launch_setup)]
-    )
+    return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

@@ -17,6 +17,7 @@ ament_python_install_module(python/romea_implement_bringup.py)
 
 install(PROGRAMS
   scripts/urdf_description.py
+  scripts/simple_command
   DESTINATION lib/${PROJECT_NAME}
 )
 

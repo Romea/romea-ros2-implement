@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+import rclpy
+from rclpy.node import Node
+from romea_implement_msgs.msg import Command
+from std_msgs.msg import Float64MultiArray
+
+
+class SimpleCommand(Node):
+    def __init__(self):
+        super().__init__("simple_command")
+
+        self.declare_parameter("anchor_high", 1.0)
+        self.declare_parameter("anchor_low", 0.0)
+
+        self.anchor_high = self.get_parameter("anchor_high").value
+        self.anchor_low = self.get_parameter("anchor_low").value
+
+        self.publisher = self.create_publisher(Float64MultiArray, "position_controller/commands", 10)
+        self.subscription = self.create_subscription(
+            Command, "command", self.command_callback, 10
+        )
+
+    def command_callback(self, msg):
+        if msg.command == Command.GO_TO_ANCHOR_LOW:
+            value = self.anchor_low
+        elif msg.command == Command.GO_TO_ANCHOR_HIGH:
+            value = self.anchor_high
+        elif msg.command == Command.GO_UP:
+            value = 1.0
+        elif msg.command == Command.GO_DOWN:
+            value = 0.0
+        else:
+            return
+
+        command_msg = Float64MultiArray()
+        command_msg.data = [value]
+        self.publisher.publish(command_msg)
+
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = SimpleCommand()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == "__main__":
+    main()
