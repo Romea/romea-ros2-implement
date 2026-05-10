@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="hitch_implement">
+   <xacro:macro name="hitch_implement"
+      params="prefix mode name xyz rpy parent_link **visuals **collisions">
+
+      <xacro:property
+         name="hitch_prefix"
+         value="${prefix}${name}" />
+      <xacro:property
+         name="parent_link_name"
+         value="${prefix}${parent_link}" />
+
+      <!-- implement -->
+      <xacro:include filename="$(find romea_implement_description)/urdf/common.xacro" />
+      <!-- params="mass x y z " -->
+      <link name="${hitch_prefix}_link">
+         <xacro:insert_block name="visuals"/>
+         <xacro:insert_block name="collisions"/>
+         <xacro:inertial_cuboid mass="100." x="1." y="2." z="0.5" />
+      </link>
+
+      <joint name="${hitch_prefix}_joint" type="fixed">
+         <origin xyz="${xyz}" rpy="${rpy}" />
+         <parent link="${parent_link_name}" />
+         <child link="${hitch_prefix}_link" />
+      </joint>
+
+      <xacro:if value="${'simulation' in mode}">
+         <gazebo reference="${hitch_prefix}_hitch_link">
+            <collision>
+               <surface>
+                  <contact>
+                     <!-- bitmask: stems(4), weeds(3), crops(2), elements(1), ground(0) -->
+                     <!-- in this case: no contact with weeds and ground -->
+                     <!-- <collide_bitmask>0x16</collide_bitmask> -->
+                     <collide_bitmask>0x00</collide_bitmask>
+                  </contact>
+               </surface>
+            </collision>
+         </gazebo>
+      </xacro:if>
+   </xacro:macro>
+</robot>

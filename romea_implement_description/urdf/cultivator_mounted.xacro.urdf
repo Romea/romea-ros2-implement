@@ -7,13 +7,8 @@
   <xacro:arg name="parent_link" default="base_link" />
   <xacro:arg name="xyz" default="0.0 0.0 0.0" />
   <xacro:arg name="rpy" default="0.0 0.0 0.0" />
-  <xacro:arg name="ros_prefix" default="/" />
-  <xacro:arg name="ros_distro" default="" />
-  <xacro:arg name="controller_manager_config_yaml_file" default="" />
-  <xacro:arg name="ros2_control_config_urdf_file" default="" />
 
-
-  <xacro:include filename="$(find romea_implement_description)/urdf/hitch_implement.xacro" />
+  <xacro:include filename="$(find romea_implement_description)/urdf/implement.xacro" />
 
   <!-- macro to generate multiple collisions with different 'y' offsets -->
   <xacro:macro name="repeat_collisions" params="offsets:=^">
@@ -55,15 +50,12 @@
     mode="$(arg mode)"
     xyz=" $(arg xyz)"
     rpy=" $(arg rpy)"
-    parent_link="$(arg parent_link)"
-    controller_manager_config_yaml_file="$(arg controller_manager_config_yaml_file)"
-    ros2_control_config_urdf_file="$(arg ros2_control_config_urdf_file)"
-    ros_prefix="$(arg ros_prefix)"
-    ros_distro="$(arg ros_distro)">
+    parent_link="$(arg parent_link)">
     <visuals>
       <visual>
         <geometry>
-          <mesh filename="package://romea_implement_description/meshes/cultivator.obj" />
+          <!-- <mesh filename="package://romea_implement_description/meshes/cultivator.obj" /> -->
+          <mesh filename="file://$(find romea_implement_description)/meshes/cultivator.obj"/>
         </geometry>
         <origin xyz="0 0 0" rpy="0 -${pi/2} 0 " />
       </visual>

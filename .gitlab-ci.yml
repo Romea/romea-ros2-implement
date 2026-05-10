@@ -1,0 +1,6 @@
+include:
+  - project: "jean.laneurit/ros_gitlab_ci"
+    file: ".gitlab-ci.yml"
+
+variables:
+  PKGS_TO_BUILD_TEST: "romea_implement_description romea_implement_meta_bringup"

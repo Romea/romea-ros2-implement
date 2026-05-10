@@ -13,60 +13,116 @@
 # limitations under the License.
 
 
-import os
-import xacro
-from xml.dom import minidom
 from ament_index_python.packages import get_package_share_directory
 
+import romea_common_description
+from romea_common_utils import save_temporary_file
 
-def hitch_implement_urdf(
-    prefix,
-    mode,
-    name,
-    model,
-    parent_link,
-    xyz,
-    rpy,
-    controller_manager_config_yaml_file,
-    ros_prefix,
-):
+import yaml
 
-    xacro_file = (
-        get_package_share_directory("romea_implement_description")
-        + "/urdf/"
-        + "hitch_"
-        + model
-        + ".xacro.urdf"
+
+# def get_specifications_file_path(implement_description):
+#     return romea_common_description.get_specifications_file_path(
+#         "romea_implement_description", implement_description
+#     )
+
+
+# def get_specifications(implement_description):
+#     with open(get_specifications_file_path(implement_description)) as f:
+#         return yaml.safe_load(f)
+
+
+# def get_geometry_file_path(implement_description):
+#     return romea_common_description.get_geometry_file_path(
+#         "romea_implement_description", implement_description
+#     )
+
+
+# def get_geometry(implement_description):
+#     with open(get_geometry_file_path(implement_description)) as f:
+#         return yaml.safe_load(f)
+
+
+# def get_specification_units_file_path():
+#     pkg_path = get_package_share_directory("romea_implement_description")
+#     return f"{pkg_path}/config/specifications_units.yaml"
+
+
+# def get_specification_units():
+#     with open(get_specification_units_file_path()) as f:
+#         return yaml.safe_load(f)
+
+
+def get_xacro_file_path(implement_description):
+    pkg = get_package_share_directory("romea_implement_description")
+    return (
+        f"{pkg}/urdf/{implement_description["model"]}_"
+        f"{implement_description["version"]}.xacro.urdf"
     )
 
-    ros2_control_config_urdf_file = "/tmp/" + prefix + name + "_ros2_control.urdf"
 
-    implement_urdf_xml = xacro.process_file(
-        xacro_file,
+def get_complete_configuration(implement_name, implement_description, implement_location):
+    # model = implement_description["model"]
+    # version = implement_description["version"]
+    # manufacturer = implement_description["manufacturer"]
+    # implement_name = f"{manufacturer} {model} {version} implement called {implement_name}"
+    # specifications = get_specifications(implement_description)
+    # specifications_units = get_specification_units()
+
+    # implement = romea_common_description.DeviceConfiguration(
+    #     implement_name, specifications, implement_description, specifications_units
+    # )
+
+    # configuration = {}
+    # configuration["model"] = implement_description["model"]
+    # configuration["version"] = implement_description["version"]
+    # configuration["manufacturer"] = implement_description["manufacturer"]
+    # configuration["control_rate"] = implement.get("control_rate")
+    # configuration["home_joint_positions"] = implement.get("home_joint_positions")
+    # return {**configuration, **implement_location}
+
+    configuration = {}
+    configuration["model"] = implement_description["model"]
+    configuration["version"] = implement_description["version"]
+    configuration["manufacturer"] = ""
+    return {**configuration, **implement_location}
+
+
+def generate_configuration_file_str(configuration, extended=False):
+    yaml.dump(configuration)
+    # units = get_specification_units()
+    # return romea_common_description.generate_configuration_file(configuration, units, extended)
+
+
+def generate_urdf_description_str(
+    prefix,
+    mode,
+    implement_name,
+    implement_description,
+    implement_location,
+    ros_namespace,
+):
+    if mode == "simulation":
+        mode += "_gazebo"
+
+    configuration = get_complete_configuration(
+        implement_name, implement_description, implement_location
+    )
+
+    # configuration_yaml_file =
+    save_temporary_file(
+        f"{prefix}{implement_name}_configuration.yaml",
+        generate_configuration_file_str(configuration),
+    )
+
+    return romea_common_description.generate_urdf_description_str(
+        get_xacro_file_path(implement_description),
         mappings={
             "prefix": prefix,
             "mode": mode,
-            "name": name,
-            "model": model,
-            "parent_link": parent_link,
-            "xyz": " ".join(map(str, xyz)),
-            "rpy": " ".join(map(str, rpy)),
-            "controller_manager_config_yaml_file": controller_manager_config_yaml_file,
-            "ros2_control_config_urdf_file": ros2_control_config_urdf_file,
-            "ros_prefix": ros_prefix,
-            "ros_distro": os.getenv("ROS_DISTRO")
+            "name": implement_name,
+            "parent_link": implement_location["parent_link"],
+            "xyz": " ".join(map(str, implement_location["xyz"])),
+            "rpy": " ".join(map(str, implement_location["xyz"])),
         },
     )
-
-    ros_control_urdf_xml = minidom.Document()
-    ros_control_urdf_xml_root = ros_control_urdf_xml.createElement("robot")
-    ros_control_urdf_xml_root.setAttribute("name", prefix + name + "_ros2_control")
-    ros_control_urdf_xml_root.appendChild(
-        implement_urdf_xml.getElementsByTagName("ros2_control")[0]
-    )
-    ros_control_urdf_xml.appendChild(ros_control_urdf_xml_root)
-
-    with open(ros2_control_config_urdf_file, "w") as f:
-        f.write(ros_control_urdf_xml.toprettyxml())
-
-    return implement_urdf_xml.toprettyxml()
