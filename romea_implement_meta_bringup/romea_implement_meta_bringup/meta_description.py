@@ -55,10 +55,6 @@ def generate_yaml_launch_file_str(meta_description):
     model = meta_description.get_model()
     launch_arguments = [
         {"name": "mode", "default": "live"},
-        {
-            "name": "controllers_configuration_file_path",
-            "default": f"{pkg}/config/{model}_controllers.yaml",
-        },
     ]
     namespaces = [
         meta_description.get_robot_name(),
