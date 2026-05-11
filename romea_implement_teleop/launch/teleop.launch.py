@@ -41,6 +41,7 @@ def launch_setup(context, *args, **kwargs):
         + f"/config/{joystick_configuration["type"]}_remappings.yaml"
     )
 
+
     with open(teleop_configuration_file_path) as f:
         teleop_configuration = yaml.safe_load(f)
 
@@ -52,7 +53,7 @@ def launch_setup(context, *args, **kwargs):
         package="romea_implement_teleop",
         executable="implement_teleop_node",
         name="implement_teleop",
-        parameters=[teleop_configuration],
+        parameters=[{"joystick_mapping": teleop_configuration}],
         output="screen",
         remappings=[("joystick/joy", joystick_topic)],
     )
@@ -62,7 +63,6 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
 
-    print("coucou!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     declared_arguments = []
 
     declared_arguments.append(DeclareLaunchArgument("joystick_configuration_file_path"))

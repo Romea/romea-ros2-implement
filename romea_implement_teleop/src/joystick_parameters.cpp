@@ -26,8 +26,6 @@ namespace {
 
 const char UP_DOWN_IMPLEMENT_AXE_MAPPING_PARAM_NAME[] =
     "joystick_mapping.axes.up_down_implement";
-const char TURBO_MODE_BUTTON_MAPPING_PARAM_NAME[] =
-    "joystick_mapping.buttons.turbo_mode";
 const char DOWN_IMPLEMENT_BUTTON_MAPPING_PARAM_NAME[] =
     "joystick_mapping.buttons.down_implement";
 const char UP_IMPLEMENT_BUTTON_MAPPING_PARAM_NAME[] =
