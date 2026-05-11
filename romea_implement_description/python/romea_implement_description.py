@@ -110,10 +110,10 @@ def generate_urdf_description_str(
     )
 
     # configuration_yaml_file =
-    save_temporary_file(
-        f"{prefix}{implement_name}_configuration.yaml",
-        generate_configuration_file_str(configuration),
-    )
+    # save_temporary_file(
+    #     f"{prefix}{implement_name}_configuration.yaml",
+    #     generate_configuration_file_str(configuration),
+    # )
 
     return romea_common_description.generate_urdf_description_str(
         get_xacro_file_path(implement_description),
