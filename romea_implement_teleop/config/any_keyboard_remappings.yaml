@@ -1,5 +1,5 @@
 axes:
-  up_down_implement: page_up_down
+  up_down_implement: home_end
 buttons:
-  down_implement: key_q
-  up_implement: key_s
+  down_implement: key_e
+  up_implement: key_r
