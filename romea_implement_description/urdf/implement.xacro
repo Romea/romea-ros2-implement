@@ -26,14 +26,14 @@
       </joint>
 
       <xacro:if value="${'simulation' in mode}">
-         <gazebo reference="${hitch_prefix}_hitch_link">
+         <gazebo reference="${hitch_prefix}_link">
             <collision>
                <surface>
                   <contact>
                      <!-- bitmask: stems(4), weeds(3), crops(2), elements(1), ground(0) -->
-                     <!-- in this case: no contact with weeds and ground -->
-                     <!-- <collide_bitmask>0x16</collide_bitmask> -->
-                     <collide_bitmask>0x00</collide_bitmask>
+                     <!-- in this case: stems + elements -->
+                     <collide_bitmask>0x12</collide_bitmask>
+                     <collide_without_contact>false</collide_without_contact>
                   </contact>
                </surface>
             </collision>
