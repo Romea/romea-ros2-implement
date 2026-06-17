@@ -49,6 +49,7 @@ def launch_setup(context, *args, **kwargs):
                 executable="simple_command",
                 exec_name="simple_command",
                 namespace=meta_description.get_full_namespace(),
+                parameters=[{"anchor_high": 0.0, "anchor_low": 0.36}],
                 remappings=[
                     (
                         "position_controller/commands",
