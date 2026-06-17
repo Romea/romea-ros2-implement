@@ -17,6 +17,7 @@
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, OpaqueFunction
 from launch.launch_description_sources import AnyLaunchDescriptionSource
+from launch_ros.actions import Node
 
 import romea_common_meta_bringup.ros_launch as common
 from romea_implement_meta_bringup.meta_description import generate_yaml_launch_file_str
@@ -30,7 +31,7 @@ def launch_setup(context, *args, **kwargs):
     with open(launch_filename, "w") as f:
         f.write(generate_yaml_launch_file_str(meta_description))
 
-    return [
+    actions = [
         IncludeLaunchDescription(
             AnyLaunchDescriptionSource(launch_filename),
             launch_arguments={
@@ -38,6 +39,27 @@ def launch_setup(context, *args, **kwargs):
             }.items(),
         )
     ]
+
+    # TODO remove this test code and replace it by a better interface for the implement
+    if mode.startswith("simu"):
+        robot_name = meta_description.get_robot_name()
+        actions += [
+            Node(
+                package="romea_implement_meta_bringup",
+                executable="simple_command",
+                exec_name="simple_command",
+                namespace=meta_description.get_full_namespace(),
+                remappings=[
+                    (
+                        "position_controller/commands",
+                        f"/{robot_name}/base/lift_arm_controller/commands",
+                    ),
+                    ("command", f"/{robot_name}/base/implement/rear/command"),
+                ],
+            )
+        ]
+
+    return actions
 
 
 def generate_launch_description():
@@ -47,6 +69,6 @@ def generate_launch_description():
             common.declare_mode("live"),
             common.declare_robot_namespace(""),
             common.declare_meta_description_file_path("implement"),
-            OpaqueFunction(function=launch_setup)
+            OpaqueFunction(function=launch_setup),
         ]
     )
