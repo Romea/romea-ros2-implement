@@ -123,6 +123,6 @@ def generate_urdf_description_str(
             "name": implement_name,
             "parent_link": implement_location["parent_link"],
             "xyz": " ".join(map(str, implement_location["xyz"])),
-            "rpy": " ".join(map(str, implement_location["xyz"])),
+            "rpy": " ".join(map(str, implement_location["rpy"])),
         },
     )
