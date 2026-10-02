@@ -50,19 +50,21 @@ launch:
 
 ### Launch files Profiles
 
-The `profile/` directory is currently empty, but it is intended to contain ready-to-use ROS 2 launch files for controlling active implements.
+The `profile/` directory contains reusable ROS2 launch files dedicated to implement bringup.
 
-These profiles will make it possible to:
+These launch profiles provide predefined setups for common execution contexts, such as:
 
-* launch implement drivers
-* launch simulator bridges
-* reuse standardized bringup configurations
+* starting a real IMU driver, for example  to be completed ???.py
+* starting a simulation bridge, for example to be completed  ???.py
+* reusing standardized bringup configurations across live and simulation modes
+
+Each profile is intended to be included from the launch section of an implement meta-description. This makes it possible to select the appropriate runtime behavior depending on the selected mode, while keeping the meta-description concise and consistent.
 
 ---
 
 ## Scripts
 
-`romea_implement_meta_bringup` provides several scripts to generate ROS2 artifacts (configuration, controllers configuration, launch and URDF files) from an implement meta-description; the usage and resulting outputs are described below.
+`romea_implement_meta_bringup` provides several scripts to generate ROS2 artifacts (configuration, launch and URDF files) from an implement meta-description; the usage and resulting outputs are described below.
 
 ### Generate configuration file
 

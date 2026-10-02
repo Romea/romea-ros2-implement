@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="hitch_triangle" params="prefix configuration radius:=0.02">
+    <xacro:include filename="$(find romea_common_description)/urdf/inertia.xacro" />
+
+    <xacro:property name="geometry" value="${configuration['geometry']}" />
+    <xacro:property name="pivot_spacing" value="${geometry['pivot_spacing']}" />
+    <xacro:property name="attachment_x"
+      value="${geometry['upper_link_attachment_x']}" />
+    <xacro:property name="attachment_z"
+      value="${geometry['upper_link_attachment_z']}" />
+    <xacro:property name="attachment_length"
+      value="${sqrt(attachment_x * attachment_x + attachment_z * attachment_z)}" />
+    <xacro:property name="attachment_angle"
+      value="${atan2(attachment_x, attachment_z)}" />
+
+    <link name="${prefix}${configuration['links']['pivot_link_name']}">
+      <visual name="lower_pivot_bar">
+        <origin xyz="0 0 0" rpy="${pi / 2} 0 0" />
+        <geometry>
+          <cylinder radius="${radius}" length="${pivot_spacing}" />
+        </geometry>
+      </visual>
+      <collision name="lower_pivot_bar">
+        <origin xyz="0 0 0" rpy="${pi / 2} 0 0" />
+        <geometry>
+          <cylinder radius="${radius}" length="${pivot_spacing}" />
+        </geometry>
+      </collision>
+
+      <visual name="upper_link_support">
+        <origin xyz="${attachment_x / 2} 0 ${attachment_z / 2}"
+          rpy="0 ${attachment_angle} 0" />
+        <geometry>
+          <cylinder radius="${radius}" length="${attachment_length}" />
+        </geometry>
+      </visual>
+      <collision name="upper_link_support">
+        <origin xyz="${attachment_x / 2} 0 ${attachment_z / 2}"
+          rpy="0 ${attachment_angle} 0" />
+        <geometry>
+          <cylinder radius="${radius}" length="${attachment_length}" />
+        </geometry>
+      </collision>
+
+      <xacro:cylinder_inertia
+        mass="${geometry['mass']}"
+        length="${attachment_length}"
+        radius="${radius}"
+        x="${attachment_x / 2}"
+        z="${attachment_z / 2}"
+        ry="${attachment_angle}" />
+    </link>
+  </xacro:macro>
+
+</robot>
