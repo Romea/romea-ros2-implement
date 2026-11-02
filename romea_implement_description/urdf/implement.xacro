@@ -30,8 +30,8 @@
             <collision>
                <surface>
                   <contact>
-                     <!-- bitmask: stems(4), weeds(3), crops(2), elements(1), ground(0) -->
-                     <!-- in this case: stems + elements -->
+                     <!-- bitmask = stems(4), weeds(3), crops(2), elements(1), ground(0) -->
+                     <!-- in this case, stems + elements -->
                      <collide_bitmask>0x12</collide_bitmask>
                      <collide_without_contact>false</collide_without_contact>
                   </contact>
