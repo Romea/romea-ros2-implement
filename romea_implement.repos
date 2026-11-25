@@ -8,6 +8,9 @@ repositories:
   romea_ros2/tools/romea_cmd_mux:
     type: git
     url: git@forge.inrae.fr:romea_ros2/tools/romea_cmd_mux.git
+  romea_ros2/tools/romea_simulation:
+    type: git
+    url: git@forge.inrae.fr:romea_ros2/tools/romea_simulation.git
   romea_ros2/interfaces/teleoperation/romea_joytick:
     type: git
     url: git@forge.inrae.fr:romea_ros2/interfaces/teleoperation/romea_joy.git
