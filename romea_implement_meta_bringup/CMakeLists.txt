@@ -30,7 +30,7 @@
 # ament_package()
 
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 project(romea_implement_meta_bringup)
 
 # Default to C++14
@@ -42,7 +42,7 @@ find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 
 install(
-  DIRECTORY launch 
+  DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )
 
