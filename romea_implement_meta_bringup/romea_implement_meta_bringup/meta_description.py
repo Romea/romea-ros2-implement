@@ -20,6 +20,7 @@ import yaml
 
 
 class ImplementMetaDescription(SensorMetaDescription):
+
     def __init__(self, meta_description_file_path, robot_name=None):
         super().__init__("implement", meta_description_file_path, robot_name)
 
@@ -51,8 +52,8 @@ def generate_yaml_configuration_file_str(meta_description, extended):
 
 def generate_yaml_launch_file_str(meta_description):
     launch_file = meta_description.get_launch_file()
-    pkg = "$(find-pkg-share romea_implement_meta_bringup)"
-    model = meta_description.get_model()
+    # pkg = "$(find-pkg-share romea_implement_meta_bringup)"
+    # model = meta_description.get_model()
     launch_arguments = [
         {"name": "mode", "default": "live"},
     ]

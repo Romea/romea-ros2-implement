@@ -16,7 +16,7 @@
 from ament_index_python.packages import get_package_share_directory
 
 import romea_common_description
-from romea_common_utils import save_temporary_file
+# from romea_common_utils import save_temporary_file
 
 import yaml
 
@@ -56,8 +56,8 @@ import yaml
 def get_xacro_file_path(implement_description):
     pkg = get_package_share_directory("romea_implement_description")
     return (
-        f"{pkg}/urdf/{implement_description["model"]}_"
-        f"{implement_description["version"]}.xacro.urdf"
+        f"{pkg}/urdf/{implement_description['model']}_"
+        f"{implement_description['version']}.xacro.urdf"
     )
 
 
@@ -105,9 +105,9 @@ def generate_urdf_description_str(
     if mode == "simulation":
         mode += "_gazebo"
 
-    configuration = get_complete_configuration(
-        implement_name, implement_description, implement_location
-    )
+    # configuration = get_complete_configuration(
+    #     implement_name, implement_description, implement_location
+    # )
 
     # configuration_yaml_file =
     # save_temporary_file(
